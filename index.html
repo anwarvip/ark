@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprint Extractor</title>
+</head>
+<body>
+    <h1>Blueprint Extractor</h1>
+    <input type="file" id="fileInput" />
+    <button onclick="processFile()">Process File</button>
+    <pre id="output"></pre>
+
+    <script>
+        function processFile() {
+            const fileInput = document.getElementById('fileInput');
+            const output = document.getElementById('output');
+
+            if (fileInput.files.length === 0) {
+                output.textContent = 'Please select a file!';
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const data = event.target.result;
+                const blueprintRegex = /Blueprint'\/Game\/Mods\/AE\/Dinos\/[^']*'/g;
+                const blueprints = [];
+                let match;
+
+                while ((match = blueprintRegex.exec(data)) !== null) {
+                    let blueprint = match[0];
+                    blueprint = blueprint.replace(/['"]+/g, '');
+                    blueprints.push(`Blueprint'${blueprint}'`);
+                }
+
+                output.textContent = blueprints.join('\n');
+            };
+
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>

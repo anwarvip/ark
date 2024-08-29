@@ -36,7 +36,7 @@
                     blueprints.push(`Blueprint'${blueprint}'`);
                 }
 
-                output.textContent = blueprints.join('\n');
+                output.textContent = blueprints.join(';');
             };
 
             reader.readAsText(file);
